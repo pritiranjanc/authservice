@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+
+    <Properties>
+        <property name="app.name">bootstrap</property>
+        <Property name="app.home">.</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="consoleAppender">
+            <PatternLayout pattern="%d %p [%.30t] %c %m%n"/>
+        </Console>
+
+        <RollingFile name="fileAppender"
+                     fileName="${app.home}/logs/${app.name}.log"
+                     filePattern="${app.home}/logs/${app.name}.%d{yyyy-MM-dd}.log.gz"
+                     ignoreExceptions="false">
+            <JSONLayout compact="true" eventEol="true" properties="true" stacktraceAsString="true" includeTimeMillis="true"/>
+            <TimeBasedTriggeringPolicy />
+        </RollingFile>
+
+        <Async name="prodAppender">
+            <ThresholdFilter level="info"/>
+            <AppenderRef ref="consoleAppender"/>
+            <AppenderRef ref="fileAppender"/>
+        </Async>
+
+    </Appenders>
+
+    <Loggers>
+        <AsyncRoot level="info">
+            <AppenderRef ref="prodAppender"/>
+        </AsyncRoot>
+    </Loggers>
+
+</Configuration>
